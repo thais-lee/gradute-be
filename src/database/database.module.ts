@@ -2,9 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IDatabaseConfig } from 'src/configs/database.config';
-// import { CheckIn } from 'src/entities/check-in.entity';
-// import { Location } from 'src/entities/location.entity';
-// import { User } from 'src/entities/user.entity';
+import { User } from 'src/entities/user.entity';
 import { DataSource } from 'typeorm';
 
 @Module({
@@ -19,7 +17,7 @@ import { DataSource } from 'typeorm';
         password: configService.get('dbPassword'),
         database: configService.get('dbName'),
         ssl: configService.get('dbSSl'),
-        // entities: [User, Location, CheckIn],
+        entities: [User],
       }),
       dataSourceFactory: async (options) => {
         return await new DataSource(options).initialize();
