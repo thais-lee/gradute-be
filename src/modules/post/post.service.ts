@@ -1,12 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Post } from 'src/entities/post.entity';
+import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
 
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  constructor(
+    @InjectRepository(Post) private readonly postRepository: Repository<Post>,
+  ) {}
+
+  async create(createPostDto: CreatePostDto, userInfo: User) {
+    createPostDto.createdById = userInfo.id;
+    createPostDto.userId = userInfo.id;
+    Logger.log(JSON.stringify(createPostDto));
+    const result = await this.postRepository.save(createPostDto);
+    return !!result;
   }
 
   findAll() {

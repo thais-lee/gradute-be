@@ -1,3 +1,5 @@
+import { ApiHideProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 import {
   BaseEntity,
   Column,
@@ -24,4 +26,11 @@ export class FullAuditedEntity extends BaseEntity {
 
   @Column({ type: 'int', nullable: true })
   deletedById?: number;
+}
+
+export class CreatedById {
+  @ApiHideProperty()
+  @IsOptional()
+  @Column({ type: 'int', nullable: true })
+  createdById?: number;
 }

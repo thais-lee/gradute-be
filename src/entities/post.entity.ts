@@ -14,6 +14,9 @@ export class Post extends FullAuditedEntity {
   @Column({ type: 'text', nullable: false })
   content: string;
 
+  @Column({ type: 'text', array: true, nullable: true })
+  imageUrls: string[];
+
   @Column({ type: 'int', default: EPostStatus.NEW })
   status: EPostStatus;
 
@@ -22,4 +25,7 @@ export class Post extends FullAuditedEntity {
 
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
+
+  @Column({ type: 'int', nullable: false })
+  userId: number;
 }
