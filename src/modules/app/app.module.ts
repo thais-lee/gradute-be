@@ -9,6 +9,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { GlobalExceptionFilter } from 'src/filters/global-exception.filter';
 import { ResponseInterceptor } from 'src/interceptors/response.interceptor';
 import { AuthModule } from 'src/modules/auth/auth.module';
+import { PostModule } from 'src/modules/post/post.module';
 import { UserModule } from 'src/modules/user/user.module';
 
 import { AppController } from './app.controller';
@@ -23,6 +24,7 @@ import { AppController } from './app.controller';
     DatabaseModule,
     AuthModule,
     UserModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [

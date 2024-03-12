@@ -2,6 +2,7 @@ import { ERole } from 'src/common/enums/role.enum';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { FullAuditedEntity } from './full-audited.entity';
+import { Post } from './post.entity';
 
 @Entity('user')
 export class User extends FullAuditedEntity {
@@ -37,4 +38,7 @@ export class User extends FullAuditedEntity {
 
   @Column({ type: 'int', nullable: false })
   role: ERole;
+
+  @OneToMany(() => User, (user) => user.posts)
+  posts: Post[];
 }
