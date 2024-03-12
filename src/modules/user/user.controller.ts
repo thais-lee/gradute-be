@@ -7,7 +7,8 @@ import {
   ParseIntPipe,
   Put,
   Query,
-  Request, // UseGuards,
+  Request,
+  UseGuards, // UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import {
@@ -16,7 +17,7 @@ import {
 } from 'src/common/common-swagger-response.dto';
 import { GetPaginatedDto } from 'src/common/get-paginated.dto';
 
-// import { AuthGuard } from '../auth/guards/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 import { GetAllUserDto } from './dto/get-all-user.dto';
 import { GetDetailUserDto } from './dto/get-detail-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -28,7 +29,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly usersService: UserService) {}
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get all users' })
   @Get('/get-all')
   @ApiOkResponsePaginated(GetAllUserDto)
@@ -36,7 +37,7 @@ export class UserController {
     return this.usersService.findAll(req.user, options);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get me' })
   @Get('/get-me')
   @ApiOkResponseCommon(GetDetailUserDto)
@@ -45,7 +46,7 @@ export class UserController {
     return this.usersService.findOne(userInfo, req.user.id);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiOkResponseCommon(GetDetailUserDto)
@@ -54,7 +55,7 @@ export class UserController {
     return this.usersService.findOne(userInfo, id);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Put(':id')
   @ApiOperation({ summary: 'Update user by id' })
   @ApiOkResponseCommon(Boolean)
@@ -67,7 +68,7 @@ export class UserController {
     return this.usersService.update(userInfo, id, updateUserDto);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user by id' })
   @ApiOkResponseCommon(Boolean)
