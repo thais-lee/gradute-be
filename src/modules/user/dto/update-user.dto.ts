@@ -12,7 +12,12 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  name: string;
+  firstName: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  lastName: string;
 
   @ApiProperty()
   @IsOptional()
@@ -32,12 +37,12 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  phoneNumber?: string;
+  phone?: string;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  imageUrl?: string;
+  avatar?: string;
 
   @ApiProperty()
   @IsOptional()
@@ -47,10 +52,9 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsOptional()
   @IsDateString()
-  dateOfBirth?: Date;
+  birthday?: Date;
 
   @ApiHideProperty()
-  @IsOptional()
   @IsOptional()
   @IsInt()
   role?: ERole;

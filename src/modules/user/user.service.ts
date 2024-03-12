@@ -5,7 +5,7 @@ import {
   Pagination,
   paginate,
 } from 'nestjs-typeorm-paginate';
-// import { ERole } from 'src/common/role.enum';
+import { ERole } from 'src/common/enums/role.enum';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 
@@ -23,15 +23,15 @@ export class UserService {
     userInfo: User,
     options: IPaginationOptions,
   ): Promise<Pagination<GetAllUserDto>> {
-    // if (userInfo.role !== ERole.ADMIN) {
-    //   throw new HttpException(
-    //     {
-    //       code: HttpStatus.FORBIDDEN,
-    //       message: 'You are not allowed to access this resource',
-    //     },
-    //     HttpStatus.FORBIDDEN,
-    //   );
-    // }
+    if (userInfo.role !== ERole.ADMIN) {
+      throw new HttpException(
+        {
+          code: HttpStatus.FORBIDDEN,
+          message: 'You are not allowed to access this resource',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
     const qb = await this.userRepository
       .createQueryBuilder('user')
       .select([
@@ -70,15 +70,15 @@ export class UserService {
       );
     }
 
-    // if (userInfo.role !== ERole.ADMIN && userInfo.id !== result.id) {
-    //   throw new HttpException(
-    //     {
-    //       code: HttpStatus.FORBIDDEN,
-    //       message: 'You are not allowed to access this resource',
-    //     },
-    //     HttpStatus.FORBIDDEN,
-    //   );
-    // }
+    if (userInfo.role !== ERole.ADMIN && userInfo.id !== result.id) {
+      throw new HttpException(
+        {
+          code: HttpStatus.FORBIDDEN,
+          message: 'You are not allowed to access this resource',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
     return result;
   }
 
@@ -134,35 +134,35 @@ export class UserService {
   async update(userInfo: User, id: number, updateUser: UpdateUserDto) {
     const user = await this.findById(id);
 
-    // if (userInfo.role !== ERole.ADMIN && userInfo.id !== user.id) {
-    //   throw new HttpException(
-    //     {
-    //       code: HttpStatus.FORBIDDEN,
-    //       message: 'You are not allowed to access this resource',
-    //     },
-    //     HttpStatus.FORBIDDEN,
-    //   );
-    // }
+    if (userInfo.role !== ERole.ADMIN && userInfo.id !== user.id) {
+      throw new HttpException(
+        {
+          code: HttpStatus.FORBIDDEN,
+          message: 'You are not allowed to access this resource',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
 
-    // if (userInfo.role !== ERole.ADMIN && updateUser.role) {
-    //   throw new HttpException(
-    //     {
-    //       code: HttpStatus.FORBIDDEN,
-    //       message: 'You are not allowed to access this resource',
-    //     },
-    //     HttpStatus.FORBIDDEN,
-    //   );
-    // }
+    if (userInfo.role !== ERole.ADMIN && updateUser.role) {
+      throw new HttpException(
+        {
+          code: HttpStatus.FORBIDDEN,
+          message: 'You are not allowed to access this resource',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
 
-    // if (updateUser.role && !Object.values(ERole).includes(updateUser.role)) {
-    //   throw new HttpException(
-    //     {
-    //       code: HttpStatus.BAD_REQUEST,
-    //       message: 'Role is not valid',
-    //     },
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // }
+    if (updateUser.role && !Object.values(ERole).includes(updateUser.role)) {
+      throw new HttpException(
+        {
+          code: HttpStatus.BAD_REQUEST,
+          message: 'Role is not valid',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const result = await this.userRepository.update(id, updateUser);
 
@@ -173,15 +173,15 @@ export class UserService {
     const user = await this.findById(id);
     const result = await this.userRepository.softDelete(user.id);
 
-    // if (userInfo.role !== ERole.ADMIN) {
-    //   throw new HttpException(
-    //     {
-    //       code: HttpStatus.FORBIDDEN,
-    //       message: 'You are not allowed to access this resource',
-    //     },
-    //     HttpStatus.FORBIDDEN,
-    //   );
-    // }
+    if (userInfo.role !== ERole.ADMIN) {
+      throw new HttpException(
+        {
+          code: HttpStatus.FORBIDDEN,
+          message: 'You are not allowed to access this resource',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
 
     return !!result;
   }
