@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   Query,
   Request,
   UseGuards,
@@ -16,10 +16,11 @@ import {
   ApiOkResponseCommon,
   ApiOkResponsePaginated,
 } from 'src/common/common-swagger-response.dto';
+import { GetPaginatedDto } from 'src/common/get-paginated.dto';
 
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CreatePostDto } from './dto/create-post.dto';
-import { GetAllPostDto, GetPostQuery } from './dto/get-all-post.dto';
+import { GetAllPostDto } from './dto/get-all-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
 
@@ -44,25 +45,33 @@ export class PostController {
   @Get('/get-all')
   @ApiOperation({ summary: 'Get all posts' })
   @ApiOkResponsePaginated(GetAllPostDto)
-  findAll(@Query() getAllPost: GetPostQuery) {
-    return this.postService.findAll();
+  findAll(@Query() paginate: GetPaginatedDto) {
+    return this.postService.getAll(paginate);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get post by id' })
   findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+    return this.postService.getOne(+id);
   }
 
-  @Patch('/update/:id')
+  @UseGuards(AuthGuard)
+  @Put('/update/:id')
   @ApiOperation({ summary: 'Update post by id' })
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @Request() req,
+  ) {
+    const userInfo = req.user;
+    return this.postService.update(+id, updatePostDto, userInfo);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('/delete/:id')
   @ApiOperation({ summary: 'Delete post by id' })
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  remove(@Param('id') id, @Request() req) {
+    const userInfo = req.user;
+    return this.postService.delete(+id, userInfo);
   }
 }

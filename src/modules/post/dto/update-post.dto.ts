@@ -15,6 +15,10 @@ export class UpdatePostDto {
 
   @ApiProperty()
   @IsOptional()
+  imageUrls?: string[];
+
+  @ApiProperty()
+  @IsOptional()
   @IsInt()
   status: EPostStatus;
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { EPostPrivacy, EPostStatus } from 'src/common/enums/post.enum';
 import { GetPaginatedDto } from 'src/common/get-paginated.dto';
 
