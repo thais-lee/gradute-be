@@ -1,12 +1,21 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 import { ERole } from 'src/common/enums/role.enum';
 import { Comment } from 'src/entities/comment.entity';
 import { User } from 'src/entities/user.entity';
 import { PostService } from 'src/modules/post/post.service';
 import { Repository } from 'typeorm';
 
-import { CreateCommentDto, UpdateCommentDto } from './dto/comment.dto';
+import {
+  CreateCommentDto,
+  GetAllCommentDto,
+  UpdateCommentDto,
+} from './dto/comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -36,27 +45,28 @@ export class CommentService {
     return !!result;
   }
 
-  //   async getAll(options: IPaginationOptions): Promise<Pagination<Post>> {
-  //     const qb = this.commentRepository
-  //       .createQueryBuilder('post')
-  //       .leftJoinAndSelect('post.user', 'user')
-  //       .select([
-  //         'post.id',
-  //         'post.title',
-  //         'post.content',
-  //         'post.imageUrls',
-  //         'post.createdById',
-  //         'post.createdAt',
-  //         'post.userId',
-  //         'user.id',
-  //         'user.username',
-  //         'user.firstName',
-  //         'user.lastName',
-  //         'user.email',
-  //       ])
-  //       .orderBy('post.createdAt', 'DESC');
-  //     return paginate<Post>(qb, options);
-  //   }
+  async getAll(
+    getAllCommentDto: GetAllCommentDto,
+    options: IPaginationOptions,
+  ): Promise<Pagination<Comment>> {
+    const qb = this.commentRepository
+      .createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.user', 'user')
+      .select([
+        'comment.id',
+        'comment.content',
+        'comment.imageUrl',
+        'comment.createdById',
+        'comment.createdAt',
+        'user.id',
+        'user.username',
+        'user.firstName',
+        'user.lastName',
+        'user.email',
+      ])
+      .orderBy('comment.createdAt', 'DESC');
+    return paginate<Comment>(qb, options);
+  }
 
   //   async getOne(id: number) {
   //     const location = this.commentRepository

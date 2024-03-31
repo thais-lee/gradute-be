@@ -17,11 +17,15 @@ import {
   ApiOkResponseCommon,
   ApiOkResponsePaginated,
 } from 'src/common/common-swagger-response.dto';
-import { GetPaginatedDto } from 'src/common/get-paginated.dto';
+import { Pagination, PaginationParams } from 'src/decorators/pagination-param';
 
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CommentService } from './comment.service';
-import { CreateCommentDto, UpdateCommentDto } from './dto/comment.dto';
+import {
+  CreateCommentDto,
+  GetAllCommentDto,
+  UpdateCommentDto,
+} from './dto/comment.dto';
 
 @Controller('comment')
 @ApiSecurity('access-token')
@@ -41,18 +45,15 @@ export class CommentController {
     return this.commentService.create(createCommentDto, userInfo);
   }
 
-  //   @Get('/get-all')
-  //   @ApiOperation({ summary: 'Get all posts' })
-  //   @ApiOkResponsePaginated(GetAllPostDto)
-  //   findAll(@Query() paginate: GetPaginatedDto) {
-  //     return this.postService.getAll(paginate);
-  //   }
-
-  //   @Get(':id')
-  //   @ApiOperation({ summary: 'Get post by id' })
-  //   findOne(@Param('id') id: string) {
-  //     return this.postService.getOne(+id);
-  //   }
+  @Get('/get-all')
+  @ApiOperation({ summary: 'Get all comments' })
+  @ApiOkResponsePaginated(GetAllCommentDto)
+  findAll(
+    @Query() getAllCommentDto: GetAllCommentDto,
+    @PaginationParams() paginateOptions: Pagination,
+  ) {
+    return this.commentService.getAll(getAllCommentDto, paginateOptions);
+  }
 
   @UseGuards(AuthGuard)
   @Put('/update/:id')
