@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -70,7 +71,7 @@ export class PostController {
   @UseGuards(AuthGuard)
   @Delete('/delete/:id')
   @ApiOperation({ summary: 'Delete post by id' })
-  remove(@Param('id') id, @Request() req) {
+  remove(@Request() req, @Param('id', ParseIntPipe) id: number) {
     const userInfo = req.user;
     return this.postService.delete(+id, userInfo);
   }

@@ -4,7 +4,7 @@ import { User } from 'src/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('friends')
-export class Post extends FullAuditedEntity {
+export class Friendship extends FullAuditedEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

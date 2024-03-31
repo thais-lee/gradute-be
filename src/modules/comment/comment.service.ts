@@ -1,14 +1,9 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  IPaginationOptions,
-  Pagination,
-  paginate,
-} from 'nestjs-typeorm-paginate';
 import { ERole } from 'src/common/enums/role.enum';
 import { Comment } from 'src/entities/comment.entity';
-import { Post } from 'src/entities/post.entity';
 import { User } from 'src/entities/user.entity';
+import { PostService } from 'src/modules/post/post.service';
 import { Repository } from 'typeorm';
 
 import { CreateCommentDto } from './dto/comment.dto';
@@ -18,9 +13,22 @@ export class CommentService {
   constructor(
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
+    private readonly postService: PostService,
   ) {}
 
   async create(createCommentDto: CreateCommentDto, userInfo: User) {
+    const post = await this.postService.getOne(createCommentDto.postId);
+
+    if (!post) {
+      throw new HttpException(
+        {
+          code: HttpStatus.NOT_FOUND,
+          message: 'Post not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     createCommentDto.createdById = userInfo.id;
     createCommentDto.userId = userInfo.id;
 
@@ -88,12 +96,34 @@ export class CommentService {
   //   }
 
   async delete(id: number, userInfo: User) {
-    throw new HttpException(
-      {
-        code: HttpStatus.FORBIDDEN,
-        message: 'You are not allowed to access this resource',
+    const comment = await this.commentRepository.findOne({
+      where: {
+        id,
       },
-      HttpStatus.FORBIDDEN,
-    );
+    });
+
+    if (!comment) {
+      throw new HttpException(
+        {
+          code: HttpStatus.NOT_FOUND,
+          message: 'Comment not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (comment.userId !== userInfo.id && userInfo.role !== ERole.ADMIN) {
+      throw new HttpException(
+        {
+          code: HttpStatus.FORBIDDEN,
+          message: 'You are not allowed to access this resource',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    const result = await this.commentRepository.delete(comment.id);
+
+    return !!result;
   }
 }

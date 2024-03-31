@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -65,11 +66,11 @@ export class CommentController {
   //     return this.postService.update(+id, updatePostDto, userInfo);
   //   }
 
-  //   @UseGuards(AuthGuard)
-  //   @Delete('/delete/:id')
-  //   @ApiOperation({ summary: 'Delete post by id' })
-  //   remove(@Param('id') id, @Request() req) {
-  //     const userInfo = req.user;
-  //     return this.postService.delete(+id, userInfo);
-  //   }
+  @UseGuards(AuthGuard)
+  @Delete('/delete/:id')
+  @ApiOperation({ summary: 'Delete comment by id' })
+  remove(@Request() req, @Param('id', ParseIntPipe) id: number) {
+    const userInfo = req.user;
+    return this.commentService.delete(+id, userInfo);
+  }
 }
