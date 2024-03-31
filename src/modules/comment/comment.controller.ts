@@ -21,7 +21,7 @@ import { GetPaginatedDto } from 'src/common/get-paginated.dto';
 
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CommentService } from './comment.service';
-import { CreateCommentDto } from './dto/comment.dto';
+import { CreateCommentDto, UpdateCommentDto } from './dto/comment.dto';
 
 @Controller('comment')
 @ApiSecurity('access-token')
@@ -54,17 +54,17 @@ export class CommentController {
   //     return this.postService.getOne(+id);
   //   }
 
-  //   @UseGuards(AuthGuard)
-  //   @Put('/update/:id')
-  //   @ApiOperation({ summary: 'Update post by id' })
-  //   update(
-  //     @Param('id') id: string,
-  //     @Body() updatePostDto: UpdatePostDto,
-  //     @Request() req,
-  //   ) {
-  //     const userInfo = req.user;
-  //     return this.postService.update(+id, updatePostDto, userInfo);
-  //   }
+  @UseGuards(AuthGuard)
+  @Put('/update/:id')
+  @ApiOperation({ summary: 'Update comment by id' })
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updatePostDto: UpdateCommentDto,
+    @Request() req,
+  ) {
+    const userInfo = req.user;
+    return this.commentService.update(+id, updatePostDto, userInfo);
+  }
 
   @UseGuards(AuthGuard)
   @Delete('/delete/:id')

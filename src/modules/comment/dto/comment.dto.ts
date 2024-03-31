@@ -40,3 +40,20 @@ export class CreateCommentDto extends CreatedById {
   @IsInt()
   privacy: ECommentType;
 }
+
+export class UpdateCommentDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsInt()
+  status: ECommentStatus;
+}

@@ -6,7 +6,7 @@ import { User } from 'src/entities/user.entity';
 import { PostService } from 'src/modules/post/post.service';
 import { Repository } from 'typeorm';
 
-import { CreateCommentDto } from './dto/comment.dto';
+import { CreateCommentDto, UpdateCommentDto } from './dto/comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -77,25 +77,30 @@ export class CommentService {
   //     return result;
   //   }
 
-  //   async update(id: number, updatePostDto: UpdatePostDto, userInfo: User) {
-  //     const post = await this.getOne(id);
+  async update(id: number, updatePostDto: UpdateCommentDto, userInfo: User) {
+    const comment = await this.checkCommentExist(id);
 
-  //     if (post.userId !== userInfo.id && userInfo.role !== ERole.ADMIN) {
-  //       throw new HttpException(
-  //         {
-  //           code: HttpStatus.FORBIDDEN,
-  //           message: 'You are not allowed to access this resource',
-  //         },
-  //         HttpStatus.FORBIDDEN,
-  //       );
-  //     }
+    await this.checkPermission(userInfo, comment);
 
-  //     const result = await this.commentRepository.update(post.id, updatePostDto);
+    const result = await this.commentRepository.update(comment.id, {
+      updatedById: userInfo.id,
+      ...updatePostDto,
+    });
 
-  //     return !!result;
-  //   }
+    return !!result;
+  }
 
   async delete(id: number, userInfo: User) {
+    const comment = await this.checkCommentExist(id);
+
+    await this.checkPermission(userInfo, comment);
+
+    const result = await this.commentRepository.delete(comment.id);
+
+    return !!result;
+  }
+
+  private async checkCommentExist(id: number) {
     const comment = await this.commentRepository.findOne({
       where: {
         id,
@@ -112,6 +117,10 @@ export class CommentService {
       );
     }
 
+    return comment;
+  }
+
+  private async checkPermission(userInfo: User, comment: Comment) {
     if (comment.userId !== userInfo.id && userInfo.role !== ERole.ADMIN) {
       throw new HttpException(
         {
@@ -121,9 +130,5 @@ export class CommentService {
         HttpStatus.FORBIDDEN,
       );
     }
-
-    const result = await this.commentRepository.delete(comment.id);
-
-    return !!result;
   }
 }
