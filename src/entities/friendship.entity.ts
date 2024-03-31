@@ -1,23 +1,18 @@
 import { EPostPrivacy, EPostStatus } from 'src/common/enums/post.enum';
 import { FullAuditedEntity } from 'src/entities/full-audited.entity';
 import { User } from 'src/entities/user.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Comment } from './comment.entity';
-
-@Entity('posts')
+@Entity('friends')
 export class Post extends FullAuditedEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'text', nullable: false })
-  title: string;
+  @Column({ type: 'int', nullable: false })
+  senderId: string;
+
+  @Column({ type: 'int', nullable: false })
+  receiverId: string;
 
   @Column({ type: 'text', nullable: false })
   content: string;
@@ -36,7 +31,4 @@ export class Post extends FullAuditedEntity {
 
   @Column({ type: 'int', nullable: false })
   userId: number;
-
-  @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[];
 }

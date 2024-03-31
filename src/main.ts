@@ -15,7 +15,7 @@ async function bootstrap() {
 
   setupSwagger({
     app,
-    title: 'Security CheckIn API Documents',
+    title: 'Coconut Server',
     prefix: configService.get('apiPrefix'),
   });
 
