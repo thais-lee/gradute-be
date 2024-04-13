@@ -13,6 +13,7 @@ import { CommentModule } from 'src/modules/comment/comment.module';
 import { PostModule } from 'src/modules/post/post.module';
 import { UserModule } from 'src/modules/user/user.module';
 
+import { CommentLikeModule } from '../comment-like/comment-like.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -27,6 +28,7 @@ import { AppController } from './app.controller';
     UserModule,
     PostModule,
     CommentModule,
+    CommentLikeModule,
   ],
   controllers: [AppController],
   providers: [
