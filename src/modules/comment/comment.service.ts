@@ -64,7 +64,16 @@ export class CommentService {
         'user.lastName',
         'user.email',
       ])
-      .orderBy('comment.createdAt', 'DESC');
+      .where('comment.postId = :postId', { postId: getAllCommentDto.postId });
+
+    if (getAllCommentDto.parentId) {
+      qb.andWhere('comment.parentId = :parentId', {
+        parentId: getAllCommentDto.parentId,
+      });
+    }
+
+    qb.orderBy('comment.createdAt', 'DESC');
+
     return paginate<Comment>(qb, options);
   }
 
