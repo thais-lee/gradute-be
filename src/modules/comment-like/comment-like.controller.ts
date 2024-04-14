@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
+  Param,
   Post,
   Put,
   Request,
@@ -45,5 +47,14 @@ export class CommentLikeController {
   ) {
     const userInfo = req.user;
     return this.commentLikeService.update(updateCommentLikeDto, userInfo.id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('/delete')
+  @ApiOperation({ summary: 'unlike a comment' })
+  @ApiOkResponseCommon(Boolean)
+  delete(@Request() req, @Param('commentId') commentId: number) {
+    const userInfo = req.user;
+    return this.commentLikeService.delete(commentId, userInfo.id);
   }
 }
