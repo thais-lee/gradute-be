@@ -4,7 +4,10 @@ import { CommentLike } from 'src/entities/comment-like.entity';
 import { Comment } from 'src/entities/comment.entity';
 import { Repository } from 'typeorm';
 
-import { CreateCommentLikeDto } from './dto/comment-like.dto';
+import {
+  CreateCommentLikeDto,
+  UpdateCommentLikeDto,
+} from './dto/comment-like.dto';
 
 @Injectable()
 export class CommentLikeService {
@@ -34,6 +37,46 @@ export class CommentLikeService {
     commentLikeDto.userId = userId;
 
     const result = await this.commentLikeRepository.save(commentLikeDto);
+    return !!result;
+  }
+
+  async update(updateCommentLikeDto: UpdateCommentLikeDto, userId: number) {
+    const commentLike = await this.commentLikeRepository.findOne({
+      where: { commentId: updateCommentLikeDto.commentId, userId: userId },
+    });
+
+    if (!commentLike) {
+      throw new HttpException(
+        {
+          code: HttpStatus.NOT_FOUND,
+          message: 'You have not liked this comment yet',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    commentLike.content = updateCommentLikeDto.content;
+
+    const result = await this.commentLikeRepository.save(commentLike);
+    return !!result;
+  }
+
+  async delete(commentId: number, userId: number) {
+    const commentLike = await this.commentLikeRepository.findOne({
+      where: { commentId: commentId, userId: userId },
+    });
+
+    if (!commentLike) {
+      throw new HttpException(
+        {
+          code: HttpStatus.NOT_FOUND,
+          message: 'You have not liked this comment yet',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const result = await this.commentLikeRepository.delete(commentLike.id);
     return !!result;
   }
 }

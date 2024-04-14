@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Post,
+  Put,
   Request,
   UseGuards,
   ValidationPipe,
@@ -11,7 +12,10 @@ import { ApiOkResponseCommon } from 'src/common/common-swagger-response.dto';
 
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CommentLikeService } from './comment-like.service';
-import { CreateCommentLikeDto } from './dto/comment-like.dto';
+import {
+  CreateCommentLikeDto,
+  UpdateCommentLikeDto,
+} from './dto/comment-like.dto';
 
 @Controller('commentLikes')
 @ApiSecurity('access-token')
@@ -29,5 +33,17 @@ export class CommentLikeController {
   ) {
     const userInfo = req.user;
     return this.commentLikeService.create(createCommentLikeDto, userInfo);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('/update')
+  @ApiOperation({ summary: 'update a comment' })
+  @ApiOkResponseCommon(Boolean)
+  update(
+    @Request() req,
+    @Body(new ValidationPipe()) updateCommentLikeDto: UpdateCommentLikeDto,
+  ) {
+    const userInfo = req.user;
+    return this.commentLikeService.update(updateCommentLikeDto, userInfo.id);
   }
 }

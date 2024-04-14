@@ -19,7 +19,7 @@ export class CreateCommentLikeDto extends CreatedById {
   userId: number;
 }
 
-export class UpdateCommentDto {
+export class UpdateCommentLikeDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsInt()
