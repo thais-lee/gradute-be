@@ -2,20 +2,28 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { ApiOkResponseCommon } from 'src/common/common-swagger-response.dto';
+import {
+  ApiOkResponseCommon,
+  ApiOkResponsePaginated,
+} from 'src/common/common-swagger-response.dto';
+import { Pagination, PaginationParams } from 'src/decorators/pagination-param';
 
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CommentLikeService } from './comment-like.service';
 import {
   CreateCommentLikeDto,
+  GetAllCommentLikeDto,
+  GetAllCommentLikeParamsDto,
   UpdateCommentLikeDto,
 } from './dto/comment-like.dto';
 
@@ -24,6 +32,16 @@ import {
 @ApiTags('comment-likes')
 export class CommentLikeController {
   constructor(private readonly commentLikeService: CommentLikeService) {}
+
+  @Get('/get-all')
+  @ApiOperation({ summary: 'Get all comment-likes' })
+  @ApiOkResponsePaginated(GetAllCommentLikeDto)
+  findAll(
+    @Query() getAllCommentDto: GetAllCommentLikeParamsDto,
+    @PaginationParams() paginateOptions: Pagination,
+  ) {
+    return this.commentLikeService.getAll(getAllCommentDto, paginateOptions);
+  }
 
   @UseGuards(AuthGuard)
   @Post('/create')
@@ -34,7 +52,7 @@ export class CommentLikeController {
     @Body(new ValidationPipe()) createCommentLikeDto: CreateCommentLikeDto,
   ) {
     const userInfo = req.user;
-    return this.commentLikeService.create(createCommentLikeDto, userInfo);
+    return this.commentLikeService.create(createCommentLikeDto, userInfo.id);
   }
 
   @UseGuards(AuthGuard)
