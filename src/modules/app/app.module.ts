@@ -14,6 +14,7 @@ import { PostModule } from 'src/modules/post/post.module';
 import { UserModule } from 'src/modules/user/user.module';
 
 import { CommentLikeModule } from '../comment-like/comment-like.module';
+import { PostLikeModule } from '../post-like/post-like.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -27,6 +28,7 @@ import { AppController } from './app.controller';
     AuthModule,
     UserModule,
     PostModule,
+    PostLikeModule,
     CommentModule,
     CommentLikeModule,
   ],

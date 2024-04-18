@@ -1,11 +1,4 @@
-import {
-  Get,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Query,
-} from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   IPaginationOptions,

@@ -9,7 +9,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { CommentLike } from './comment-like.entity';
 import { Comment } from './comment.entity';
+import { PostLike } from './post-like.entity';
 
 @Entity('posts')
 export class Post extends FullAuditedEntity {
@@ -39,4 +41,7 @@ export class Post extends FullAuditedEntity {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => PostLike, (commentLike) => commentLike.post)
+  likes: PostLike[];
 }
