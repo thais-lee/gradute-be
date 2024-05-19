@@ -16,6 +16,7 @@ import { UserModule } from 'src/modules/user/user.module';
 import { CommentLikeModule } from '../comment-like/comment-like.module';
 import { PostLikeModule } from '../post-like/post-like.module';
 import { AppController } from './app.controller';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AppController } from './app.controller';
     PostLikeModule,
     CommentModule,
     CommentLikeModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [

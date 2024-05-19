@@ -1,1 +1,1 @@
-\dt
+SELECT * FROM medias;

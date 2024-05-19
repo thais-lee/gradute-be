@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { IDatabaseConfig } from 'src/configs/database.config';
 import { CommentLike } from 'src/entities/comment-like.entity';
 import { Comment } from 'src/entities/comment.entity';
+import { Media } from 'src/entities/media.entity';
 import { PostLike } from 'src/entities/post-like.entity';
 import { Post } from 'src/entities/post.entity';
 import { User } from 'src/entities/user.entity';
@@ -21,7 +22,7 @@ import { DataSource } from 'typeorm';
         password: configService.get('dbPassword'),
         database: configService.get('dbName'),
         ssl: configService.get('dbSSl'),
-        entities: [User, Post, Comment, CommentLike, PostLike],
+        entities: [User, Post, Comment, CommentLike, PostLike, Media],
       }),
       dataSourceFactory: async (options) => {
         return await new DataSource(options).initialize();

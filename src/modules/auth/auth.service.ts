@@ -23,7 +23,6 @@ export class AuthService {
 
   async login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const user = await this.usersService.findWithEmail(loginDto.email, true);
-
     if (!user || !bcrypt.compareSync(loginDto.password, user.password)) {
       throw new HttpException(
         {
